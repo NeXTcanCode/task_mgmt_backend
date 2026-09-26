@@ -1,6 +1,9 @@
 // Server-side LLM client. The API key is never sent to the browser.
 const crypto = require("crypto");
 const AiCache = require("../models/AiCache");
+// Router selects from available free models; old deployment model overrides
+// must not pin requests to an unavailable or paid model.
+const FREE_ROUTER = "openrouter/free";
 
 const generateJson = async (prompt) => {
   const apiKey = process.env.OPENROUTER_API_KEY || process.env.AI_API_KEY;
@@ -15,10 +18,8 @@ const generateJson = async (prompt) => {
         "HTTP-Referer": process.env.CLIENT_ORIGIN || "http://localhost:5173",
         "X-Title": "TaskTracker",
       },
-      // OPENROUTER_MODEL may be a comma-separated list; OpenRouter falls back
-      // through it in order when a model is rate-limited or unavailable.
       body: JSON.stringify({
-        models: (process.env.OPENROUTER_MODEL || "openai/gpt-4o-mini").split(",").map((m) => m.trim()).filter(Boolean),
+        model: FREE_ROUTER,
         messages: [{ role: "user", content: prompt }],
       }),
       // Free models can be slow to respond.
@@ -56,7 +57,7 @@ const generateJson = async (prompt) => {
 // The cache is best-effort: a database error never blocks the AI call.
 const cachedGenerateJson = async (prompt) => {
   const model = process.env.OPENROUTER_API_KEY
-    ? process.env.OPENROUTER_MODEL || "openai/gpt-4o-mini"
+    ? FREE_ROUTER
     : process.env.AI_MODEL || "gemini-2.5-flash";
   const key = crypto.createHash("sha256").update(`${model}\n${prompt}`).digest("hex");
 

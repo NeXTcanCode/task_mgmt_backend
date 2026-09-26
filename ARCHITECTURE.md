@@ -213,7 +213,7 @@ JWT_EXPIRES_IN=1d
 CLIENT_ORIGIN=http://localhost:5173
 NODE_ENV=development
 OPENROUTER_API_KEY=       # optional, enables AI features
-OPENROUTER_MODEL=openai/gpt-4o-mini   # one model or a comma-separated fallback list
+# Model selection uses openrouter/free automatically (OPENROUTER_MODEL is ignored).
 AI_API_KEY=               # legacy Gemini, used only without OPENROUTER_API_KEY
 AI_MODEL=gemini-2.5-flash
 ```
