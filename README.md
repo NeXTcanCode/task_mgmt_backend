@@ -2,6 +2,23 @@
 
 REST API for a task and time tracking app. Express 5 + MongoDB/Mongoose + JWT auth. Features task CRUD, a running timer, daily summary with timezone support, and optional AI-assisted task creation and insights.
 
+## Live Demo and Source Code
+
+- **Live demo:** [https://task-tracker-by-vikas.netlify.app/](https://task-tracker-by-vikas.netlify.app/)
+- **Frontend repository:** [task_mgmt_frontend](https://github.com/NeXTcanCode/task_mgmt_frontend)
+- **Backend repository:** [task_mgmt_backend](https://github.com/NeXTcanCode/task_mgmt_backend)
+- **Demo email:** `demo1234@gmail.com`
+- **Demo password:** `demo1234`
+
+## Review Checklist
+
+- ✅ Local development setup instructions
+- ✅ Brief backend tech-stack summary
+- ✅ Live deployed link is available above
+- ✅ Live demo link is available above
+- ✅ Working authentication with JWT and httpOnly cookies
+- ✅ Optional test credentials are provided above
+
 ## Tech Stack
 
 | Concern       | Choice                        |
