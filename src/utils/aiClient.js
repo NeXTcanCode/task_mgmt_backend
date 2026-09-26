@@ -8,6 +8,7 @@ const FREE_ROUTER = "openrouter/free";
 const generateJson = async (prompt) => {
   const apiKey = process.env.OPENROUTER_API_KEY || process.env.AI_API_KEY;
   if (!apiKey) throw new Error("OPENROUTER_API_KEY is not set");
+  console.log("🤖 LLM Call - API Key Set:", !!process.env.OPENROUTER_API_KEY, "Using Router:", process.env.OPENROUTER_API_KEY ? FREE_ROUTER : "gemini");
 
   if (process.env.OPENROUTER_API_KEY) {
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -27,7 +28,9 @@ const generateJson = async (prompt) => {
     });
     const body = await response.json().catch(() => ({}));
     if (!response.ok || body.error) {
-      throw new Error(`OpenRouter API responded ${body.error?.code || response.status}: ${body.error?.message || "unknown error"}`);
+      const errorMsg = `OpenRouter API responded ${body.error?.code || response.status}: ${body.error?.message || "unknown error"}`;
+      console.error("❌ OpenRouter Error:", errorMsg);
+      throw new Error(errorMsg);
     }
     const text = body.choices?.[0]?.message?.content;
     if (!text) throw new Error("LLM returned no content");
