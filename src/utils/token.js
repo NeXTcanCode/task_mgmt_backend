@@ -24,7 +24,11 @@ const cookieOptionsFor = (req) => {
 const setAuthCookie = (res, userId) => {
   const token = signToken(userId);
   const { exp } = jwt.decode(token);
-  res.cookie("token", token, { ...cookieOptionsFor(res.req), expires: new Date(exp * 1000) });
+  res.cookie("token", token, {
+    ...cookieOptionsFor(res.req),
+    expires: new Date(exp * 1000),
+    domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined
+  });
 };
 
 module.exports = { setAuthCookie, cookieOptionsFor };
