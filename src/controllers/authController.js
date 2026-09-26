@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const AppError = require("../utils/AppError");
-const { setAuthCookie, cookieOptions } = require("../utils/token");
+const { setAuthCookie, cookieOptionsFor } = require("../utils/token");
 
 // Only the fields the client should see (never passwordHash)
 const publicUser = (user) => ({ id: user._id, name: user.name, email: user.email });
@@ -44,7 +44,7 @@ const loginUser = async function (req, res) {
 // POST /api/auth/logout
 const logoutUser = async function (req, res) {
   // Same options as when set, otherwise the browser may keep the cookie
-  res.clearCookie("token", cookieOptions);
+  res.clearCookie("token", cookieOptionsFor(req));
   res.json({ success: true, data: null });
 };
 
