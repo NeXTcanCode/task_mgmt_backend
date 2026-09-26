@@ -24,10 +24,11 @@ const cookieOptionsFor = (req) => {
 const setAuthCookie = (res, userId) => {
   const token = signToken(userId);
   const { exp } = jwt.decode(token);
+  const crossSite = !res.req.headers.origin || !/^http:\/\/localhost/.test(res.req.headers.origin);
   res.cookie("token", token, {
     ...cookieOptionsFor(res.req),
     expires: new Date(exp * 1000),
-    domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined
+    domain: crossSite ? '.onrender.com' : undefined
   });
 };
 
