@@ -24,11 +24,11 @@ const cookieOptionsFor = (req) => {
 const setAuthCookie = (res, userId) => {
   const token = signToken(userId);
   const { exp } = jwt.decode(token);
-  const crossSite = !res.req.headers.origin || !/^http:\/\/localhost/.test(res.req.headers.origin);
   res.cookie("token", token, {
     ...cookieOptionsFor(res.req),
     expires: new Date(exp * 1000),
-    domain: crossSite ? '.onrender.com' : undefined
+    // Omit Domain: onrender.com is a public suffix, so browsers reject cookies
+    // scoped to it. A host-only cookie belongs to this backend service.
   });
 };
 
