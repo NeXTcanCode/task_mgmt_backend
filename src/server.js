@@ -15,10 +15,19 @@ const PORT = process.env.PORT || 3000;
 // Render sits behind a proxy: trust it so req.ip (used by the rate limiter) is the real user IP
 app.set("trust proxy", 1);
 
+const ALLOWED_ORIGINS = [
+  "http://localhost:5173",
+  "https://task-management-by-vikas.netlify.app",
+];
+
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
+    origin(origin, cb) {
+      // no origin = same-origin / curl; allow it
+      if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+      cb(new Error("Not allowed by CORS"));
+    },
     credentials: true, // allow the cookie to be sent
   })
 );
