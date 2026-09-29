@@ -12,6 +12,7 @@ const { getTaskInsights } = require("../controllers/insightsController");
 const requireAuth = require("../middleware/requireAuth");
 const validate = require("../middleware/validate");
 const { aiLimiter } = require("../middleware/rateLimiter");
+const asyncHandler = require("../utils/asyncHandler");
 const {
   createTaskSchema,
   updateTaskSchema,
@@ -26,16 +27,16 @@ const router = express.Router();
 router.use(requireAuth);
 
 // Must come before "/:id" routes
-router.post("/ai-suggest", aiLimiter, validate(aiSuggestSchema), aiSuggest);
-router.get("/:id/insights", aiLimiter, validate(insightsQuery, "query"), getTaskInsights);
+router.post("/ai-suggest", aiLimiter, validate(aiSuggestSchema), asyncHandler(aiSuggest));
+router.get("/:id/insights", aiLimiter, validate(insightsQuery, "query"), asyncHandler(getTaskInsights));
 
-router.post("/", validate(createTaskSchema), createTask);
-router.get("/", validate(listTasksQuery, "query"), getTasks);
-router.get("/:id", getTask);
-router.patch("/:id", validate(updateTaskSchema), updateTask);
-router.delete("/:id", deleteTask);
+router.post("/", validate(createTaskSchema), asyncHandler(createTask));
+router.get("/", validate(listTasksQuery, "query"), asyncHandler(getTasks));
+router.get("/:id", asyncHandler(getTask));
+router.patch("/:id", validate(updateTaskSchema), asyncHandler(updateTask));
+router.delete("/:id", asyncHandler(deleteTask));
 
-router.post("/:id/timer/start", startTimer);
-router.post("/:id/timer/stop", stopTimer);
+router.post("/:id/timer/start", asyncHandler(startTimer));
+router.post("/:id/timer/stop", asyncHandler(stopTimer));
 
 module.exports = router;

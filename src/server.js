@@ -18,6 +18,7 @@ app.set("trust proxy", 1);
 const ALLOWED_ORIGINS = [
   "http://localhost:5173",
   "https://task-tracker-by-vikas.netlify.app",
+  "https://next-kinetix.netlify.app",
 ];
 
 app.use(helmet());

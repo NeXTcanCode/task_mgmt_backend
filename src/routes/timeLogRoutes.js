@@ -6,14 +6,15 @@ const {
 } = require("../controllers/timeLogController");
 const requireAuth = require("../middleware/requireAuth");
 const validate = require("../middleware/validate");
+const asyncHandler = require("../utils/asyncHandler");
 const { listTimeLogsQuery } = require("../validators/timeLogValidator");
 
 const router = express.Router();
 
 router.use(requireAuth);
 
-router.get("/", validate(listTimeLogsQuery, "query"), getTimeLogs);
-router.get("/active", getActiveTimeLog); // before "/:id"
-router.delete("/:id", deleteTimeLog);
+router.get("/", validate(listTimeLogsQuery, "query"), asyncHandler(getTimeLogs));
+router.get("/active", asyncHandler(getActiveTimeLog)); // before "/:id"
+router.delete("/:id", asyncHandler(deleteTimeLog));
 
 module.exports = router;
